@@ -86,7 +86,7 @@ CmdTemperature.prototype = {
    },
 
    getState: function (callback) {
-      this.logDebug('Call to getState: waiting_response is "' + this.waiting_response + '"' );
+      this.logDebug('Call to getState: waiting_response is');
       this.updateState(); //This sets the promise in last_value
       this.last_value.then((value) => {
          callback(null, value);
