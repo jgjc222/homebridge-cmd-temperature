@@ -60,8 +60,8 @@ CmdTemperature.prototype = {
                   self.log('Failed to get value');
                   reject(stderr);
             } else {
-self.log('/var/lib/homebridge/aux/'+this.name);
-this.fs.appendFile('/var/lib/homebridge/aux/'+this.name, stdout, function (err) {
+self.log('/var/lib/homebridge/aux/'+self.name);
+self.fs.appendFile('/var/lib/homebridge/aux/'+self.name, stdout, function (err) {
   if (err) throw err;
 });
 
