@@ -63,15 +63,14 @@ CmdTemperature.prototype = {
                   self.log('Failed to');
                   reject(stderr);
             } else {
-                  self.last_value = stdout;
                   self.log(stdout);
                   resolve(stdout);
     }
   });
             }).on('error', reject).end();
       });
-      self.log("out of " + self.last_value);
-      self.last_value.then((value) => {
+      this.log("out of " + self.last_value);
+      this.last_value.then((value) => {
          this.temperatureService
             .getCharacteristic(Characteristic.CurrentTemperature).updateValue(value);
          this.temperatureService
