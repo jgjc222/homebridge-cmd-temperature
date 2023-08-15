@@ -1,6 +1,4 @@
 var Service, Characteristic;
-const http_request = require('http').request;
-const https_request = require('https').request;
 
 const CELSIUS_UNITS = 'C',
       FAHRENHEIT_UNITS = 'F';
@@ -10,46 +8,31 @@ const DEF_MIN_TEMPERATURE = -100,
       DEF_TIMEOUT = 5000,
       DEF_INTERVAL = 120000; //120s
 
+const { exec } = require("child_process");
+const ExecQueue = require('./ExecQueue');
+const execQueue = new ExecQueue();
+
 module.exports = function (homebridge) {
    Service = homebridge.hap.Service;
    Characteristic = homebridge.hap.Characteristic;
-   homebridge.registerAccessory("homebridge-http-temperature", "HttpTemperature", HttpTemperature);
+   homebridge.registerAccessory("homebridge-cmd-temperature", "CmdTemperature", CmdTemperature);
 }
 
 
-function HttpTemperature(log, config) {
+function CmdTemperature(log, config) {
    this.log = log;
 
    this.name = config.name;
-   this.url = config.url;
-   const protocol = config.http_protocol ? config.protocol.toLowerCase() :
-      (this.url.indexOf('http://') !== -1 ? 'http' : 'https');
-   this.request = protocol === 'http' ? http_request : https_request;
-   this.request_opts = {
-      method: config.http_method || "GET",
-      timeout: config.timeout || DEF_TIMEOUT,
-   };
-   this.manufacturer = config["manufacturer"] || "@metbosch";
-   this.model = config["model"] || "Model not available";
-   this.serial = config["serial"] || "Non-defined serial";
+   this.manufacturer = config["manufacturer"] || "Unavailable";
+   this.model = config["model"] || "Unavailable";
+   this.serial = config["serial"] || "Unavailable";
    this.fieldName = ( config["field_name"] != null ? config["field_name"] : "temperature" );
    this.minTemperature = config["min_temp"] || DEF_MIN_TEMPERATURE;
    this.maxTemperature = config["max_temp"] || DEF_MAX_TEMPERATURE;
    this.units = config["units"] || DEF_UNITS;
    this.update_interval = Number( config["update_interval"] || DEF_INTERVAL );
    this.debug = config["debug"] || false;
-
-   //Check auth option
-   if (config.auth && config.auth.user !== undefined && config.auth.pass !== undefined) {
-      this.request_opts.auth = config.auth.user + ':' + config.auth.pass;
-   } else if (config.auth) {
-      this.log('Ignoring invalid auth options. "user" and "pass" must be provided');
-   }
-
-   //Check headers option
-   if (config.http_headers) {
-      this.request_opts.headers = config.http_headers;
-   }
+   this.exec = function() {execQueue.add.apply(execQueue, arguments)}
 
    //Check if units field is valid
    this.units = this.units.toUpperCase()
@@ -63,7 +46,7 @@ function HttpTemperature(log, config) {
    this.waiting_response = false;
 }
 
-HttpTemperature.prototype = {
+CmdTemperature.prototype = {
 
    logDebug: function (str) {
       if (this.debug) {
@@ -78,38 +61,16 @@ HttpTemperature.prototype = {
          return;
       }
       this.waiting_response = true;
-      this.last_value = new Promise((resolve, reject) => {
-         this.logDebug('Requesting temperature on "' + this.url);
-         this.request(this.url, this.request_opts, (res) => {
-            let body = '';
-            res.on('data', (chunk) => {
-               body += chunk;
-            });
-            res.on('end', () => {
-               let value = null;
-               try {
-                  let value_str = this.fieldName === '' ? body : this.getFromObject(JSON.parse(body), this.fieldName, '');
-                  value_str = value_str.replace(/[^0-9.]/g, '');
-                  value = Number(value_str);
-                  if (value_str === '' || isNaN(value)) {
-                     throw new Error('Received value is not a number: "' + value_str + '" ("' + body.substring(0, 100) + '")');
-                  } else if (value < this.minTemperature || value > this.maxTemperature) {
-                     var msg = 'Received value is out of bounds: "' + value + '". min=' + this.minTemperature +
-                               ', max= ' + this.maxTemperature;
-                     throw new Error(msg);
-                  }
-                  this.logDebug('HTTP successful response: ' + value);
-                  if (this.units === FAHRENHEIT_UNITS) {
-                     value = (value - 32)/1.8;
-                     this.logDebug('Converted Fahrenheit temperature to celsius: ' + value);
-                  }
-               } catch (error) {
-                  reject(error);
-               }
-               resolve(value);
-            });
-         }).on('error', reject).end();
-      });
+      cmd = "/home/jgjc/.local/bin/remo device get --token lDPCKK_hYfaSK34Av0NGIFAjfW8Fb_fd23g29anwJ2g.F884BI3bKFfvmzm3XeE_WYZaEEK-8Ld2qQTXAfcrWK8 | jq '.[0].newest_events.te.val"
+      this.exec(cmd, function (error, stdout, stderr) {
+            // Error detection
+            if (error) {
+                  self.log("Failed to");
+                  self.log(stderr);
+            } else {
+                  this.last_value = stdout;
+                  self.log(stdout);
+            }
       this.last_value.then((value) => {
          this.temperatureService
             .getCharacteristic(Characteristic.CurrentTemperature).updateValue(value);
