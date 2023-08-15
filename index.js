@@ -19,7 +19,6 @@ module.exports = function (homebridge) {
 
 function CmdTemperature(log, config) {
    this.log = log;
-
    this.name = config.name;
    this.manufacturer = config["manufacturer"] || "Unavailable";
    this.model = config["model"] || "Unavailable";
@@ -46,13 +45,10 @@ function CmdTemperature(log, config) {
 }
 
 CmdTemperature.prototype = {
-
    updateState: function () {
          var self = this;
-         this.log(this.cmd);
       //Ensure previous call finished
       if (this.waiting_response) {
-         this.log('Avoid updateState as previous response does not arrived yet');
          return;
       }
       this.waiting_response = true;
@@ -67,7 +63,6 @@ CmdTemperature.prototype = {
     }
             });
       });
-      this.log("out of " + self.last_value);
       this.last_value.then((value) => {
          this.temperatureService
             .getCharacteristic(Characteristic.CurrentTemperature).updateValue(value);
@@ -83,7 +78,6 @@ CmdTemperature.prototype = {
    },
 
    getState: function (callback) {
-      this.log('Call to getState: waiting_response is');
       this.updateState(); //This sets the promise in last_value
       this.last_value.then((value) => {
          callback(null, value);
