@@ -57,11 +57,11 @@ CmdTemperature.prototype = {
       this.last_value = new Promise((resolve, reject) => {
       this.exec(this.cmd, function (error, stdout, stderr) {
             if (stderr) {
-                  self.log('Failed to');
+                  self.log('Failed to get value');
                   reject(stderr);
             } else {
-
-this.fs.appendFile("/var/lib/homebridge/aux/"+this.name, stdout, function (err) {
+self.log('/var/lib/homebridge/aux/'+this.name);
+this.fs.appendFile('/var/lib/homebridge/aux/'+this.name, stdout, function (err) {
   if (err) throw err;
 });
 
