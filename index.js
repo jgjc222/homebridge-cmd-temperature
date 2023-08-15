@@ -57,7 +57,7 @@ CmdTemperature.prototype = {
          this.log('Avoid updateState as previous response does not arrived yet');
          return;
       }
-//      this.waiting_response = true;
+      this.waiting_response = true;
       this.exec(this.cmd, function (error, stdout, stderr) {
             // Error detection
             if (stderr) {
@@ -69,7 +69,7 @@ CmdTemperature.prototype = {
     }
   });
       self.log("out of " + self.last_value);
-      this.last_value.then((value) => {
+      self.last_value.then((value) => {
          this.temperatureService
             .getCharacteristic(Characteristic.CurrentTemperature).updateValue(value);
          this.temperatureService
