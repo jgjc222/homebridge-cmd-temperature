@@ -60,7 +60,7 @@ CmdTemperature.prototype = {
 //      this.waiting_response = true;
       this.exec(this.cmd, function (error, stdout, stderr) {
             // Error detection
-            if (error) {
+            if (stderr) {
                   self.log('Failed to');
                   self.log(stderr);
             } else {
