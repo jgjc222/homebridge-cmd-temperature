@@ -51,6 +51,7 @@ CmdTemperature.prototype = {
 
    updateState: function () {
          var self = this;
+         this.log(this.cmd);
       //Ensure previous call finished
       if (this.waiting_response) {
          this.log('Avoid updateState as previous response does not arrived yet');
