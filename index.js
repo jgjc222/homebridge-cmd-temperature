@@ -71,6 +71,7 @@ CmdTemperature.prototype = {
                   this.last_value = stdout;
                   self.log(stdout);
             }
+      }
       this.last_value.then((value) => {
          this.temperatureService
             .getCharacteristic(Characteristic.CurrentTemperature).updateValue(value);
