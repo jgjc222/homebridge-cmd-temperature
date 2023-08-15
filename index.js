@@ -65,11 +65,11 @@ CmdTemperature.prototype = {
       this.exec(cmd, function (error, stdout, stderr) {
             // Error detection
             if (error) {
-                  self.log("Failed to");
-                  self.log(stderr);
+                  this.logDebug("Failed to");
+                  this.logDebug(stderr);
             } else {
                   this.last_value = stdout;
-                  self.log(stdout);
+                  this.logDebug(stdout);
             }
       });
       this.last_value.then((value) => {
