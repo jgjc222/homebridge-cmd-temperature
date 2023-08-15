@@ -56,7 +56,7 @@ CmdTemperature.prototype = {
          this.log('Avoid updateState as previous response does not arrived yet');
          return;
       }
-      this.waiting_response = true;
+//      this.waiting_response = true;
       this.exec(this.cmd, function (error, stdout, stderr) {
             // Error detection
             if (error) {
