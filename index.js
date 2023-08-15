@@ -58,7 +58,6 @@ CmdTemperature.prototype = {
       this.waiting_response = true;
       this.last_value = new Promise((resolve, reject) => {
       this.exec(this.cmd, function (error, stdout, stderr) {
-            // Error detection
             if (stderr) {
                   self.log('Failed to');
                   reject(stderr);
@@ -66,8 +65,7 @@ CmdTemperature.prototype = {
                   self.log(stdout);
                   resolve(stdout);
     }
-  });
-            }).on('error', reject).end();
+            });
       });
       this.log("out of " + self.last_value);
       this.last_value.then((value) => {
