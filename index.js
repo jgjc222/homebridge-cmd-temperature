@@ -49,6 +49,7 @@ function CmdTemperature(log, config) {
 CmdTemperature.prototype = {
 
    updateState: function () {
+         var self = this;
       //Ensure previous call finished
       if (this.waiting_response) {
          this.log('Avoid updateState as previous response does not arrived yet');
@@ -59,13 +60,13 @@ CmdTemperature.prototype = {
       this.exec(cmd, function (error, stdout, stderr) {
             // Error detection
             if (error) {
-                  this.log("Failed to");
-                  this.log(stderr);
+                  self.log("Failed to");
+                  self.log(stderr);
             } else {
-                  this.last_value = stdout;
-                  this.log(stdout);
-            }
-      });
+                  self.last_value = stdout;
+                  self.log(stdout);
+    }
+  });
       this.last_value.then((value) => {
          this.temperatureService
             .getCharacteristic(Characteristic.CurrentTemperature).updateValue(value);
