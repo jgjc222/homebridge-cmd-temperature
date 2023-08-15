@@ -61,13 +61,14 @@ CmdTemperature.prototype = {
       this.exec(this.cmd, function (error, stdout, stderr) {
             // Error detection
             if (error) {
-                  self.log("Failed to");
+                  self.log('Failed to');
                   self.log(stderr);
             } else {
-                  self.last_value = stdout;
+                  this.last_value = stdout;
                   self.log(stdout);
     }
   });
+      self.log(this.last_value);
       this.last_value.then((value) => {
          this.temperatureService
             .getCharacteristic(Characteristic.CurrentTemperature).updateValue(value);
