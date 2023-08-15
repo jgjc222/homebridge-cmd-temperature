@@ -56,17 +56,20 @@ CmdTemperature.prototype = {
          return;
       }
       this.waiting_response = true;
+      this.last_value = new Promise((resolve, reject) => {
       this.exec(this.cmd, function (error, stdout, stderr) {
             // Error detection
             if (stderr) {
                   self.log('Failed to');
-                  self.log(stderr);
+                  reject(stderr);
             } else {
                   self.last_value = stdout;
                   self.log(stdout);
-                  self.waiting_response = false;
+                  resolve(stdout);
     }
   });
+            }).on('error', reject).end();
+      });
       self.log("out of " + self.last_value);
       self.last_value.then((value) => {
          this.temperatureService
