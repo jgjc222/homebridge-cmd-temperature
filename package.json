@@ -1,11 +1,11 @@
 {
-  "name": "homebridge-http-temperature",
-  "version": "0.10.0",
+  "name": "homebridge-cmd-temperature",
+  "version": "0.0.1",
   "description": "http/s plugin for homebridge supporting temperature sensors",
   "license": "ISC",
   "keywords": [
     "homebridge-plugin",
-    "http",
+    "cmd",
     "temperature sensor"
   ],
   "engines": {
@@ -13,10 +13,10 @@
     "homebridge": ">=0.2.0"
   },
   "author": {
-    "name": "@metbosch"
+    "name": "@jgjc222"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/metbosch/homebridge-http-temperature.git"
+    "url": "git://github.com/jgjc222/homebridge-cmd-temperature.git"
   }
 }
