@@ -9,6 +9,7 @@ const DEF_MIN_TEMPERATURE = -100,
       DEF_INTERVAL = 120000; //120s
 
 const { exec } = require("child_process");
+const { fs } = require('fs');
 
 module.exports = function (homebridge) {
    Service = homebridge.hap.Service;
@@ -29,8 +30,9 @@ function CmdTemperature(log, config) {
    this.units = config["units"] || DEF_UNITS;
    this.update_interval = Number( config["update_interval"] || DEF_INTERVAL );
    this.debug = config["debug"] || false;
-   this.exec = this.exec = exec;
+   this.exec = exec;
    this.cmd = config["cmd"];
+   this.fs = fs;
 
    //Check if units field is valid
    this.units = this.units.toUpperCase()
@@ -58,7 +60,12 @@ CmdTemperature.prototype = {
                   self.log('Failed to');
                   reject(stderr);
             } else {
-                  self.log(stdout);
+
+this.fs.appendFile("/var/lib/homebridge/aux/"+this.name, stdout, function (err) {
+  if (err) throw err;
+});
+
+            
                   resolve(stdout);
     }
             });
