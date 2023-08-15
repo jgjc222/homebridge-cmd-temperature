@@ -64,7 +64,7 @@ CmdTemperature.prototype = {
                   self.log('Failed to');
                   self.log(stderr);
             } else {
-                  this.last_value = stdout;
+//                  this.last_value = stdout;
                   self.log(stdout);
     }
   });
