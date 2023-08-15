@@ -48,12 +48,6 @@ function CmdTemperature(log, config) {
 
 CmdTemperature.prototype = {
 
-   logDebug: function (str) {
-      if (this.debug) {
-         this.log(str)
-      }
-   },
-
    updateState: function () {
       //Ensure previous call finished
       if (this.waiting_response) {
