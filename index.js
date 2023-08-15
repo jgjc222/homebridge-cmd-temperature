@@ -57,7 +57,7 @@ CmdTemperature.prototype = {
    updateState: function () {
       //Ensure previous call finished
       if (this.waiting_response) {
-         this.logDebug('Avoid updateState as previous response does not arrived yet');
+         this.log('Avoid updateState as previous response does not arrived yet');
          return;
       }
       this.waiting_response = true;
@@ -65,11 +65,11 @@ CmdTemperature.prototype = {
       this.exec(cmd, function (error, stdout, stderr) {
             // Error detection
             if (error) {
-                  this.logDebug("Failed to");
-                  this.logDebug(stderr);
+                  this.log("Failed to");
+                  this.log(stderr);
             } else {
                   this.last_value = stdout;
-                  this.logDebug(stdout);
+                  this.log(stdout);
             }
       });
       this.last_value.then((value) => {
@@ -87,7 +87,7 @@ CmdTemperature.prototype = {
    },
 
    getState: function (callback) {
-      this.logDebug('Call to getState: waiting_response is');
+      this.log('Call to getState: waiting_response is');
       this.updateState(); //This sets the promise in last_value
       this.last_value.then((value) => {
          callback(null, value);
