@@ -66,6 +66,7 @@ CmdTemperature.prototype = {
             } else {
                   self.last_value = stdout;
                   self.log(stdout);
+                  self.waiting_response = false;
     }
   });
       self.log("out of " + self.last_value);
