@@ -9,7 +9,7 @@ const DEF_MIN_TEMPERATURE = -100,
       DEF_INTERVAL = 120000; //120s
 
 const { exec } = require("child_process");
-const { fs } = require('fs');
+const fs = require("fs");
 
 module.exports = function (homebridge) {
    Service = homebridge.hap.Service;
