@@ -33,7 +33,7 @@ function CmdTemperature(log, config) {
    this.update_interval = Number( config["update_interval"] || DEF_INTERVAL );
    this.debug = config["debug"] || false;
    this.exec = function() {execQueue.add.apply(execQueue, arguments)}
-   this.cmd = config.cdm;
+   this.cmd = config["cmd"];
 
    //Check if units field is valid
    this.units = this.units.toUpperCase()
