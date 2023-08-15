@@ -33,6 +33,7 @@ function CmdTemperature(log, config) {
    this.update_interval = Number( config["update_interval"] || DEF_INTERVAL );
    this.debug = config["debug"] || false;
    this.exec = function() {execQueue.add.apply(execQueue, arguments)}
+   this.cmd = config.cdm;
 
    //Check if units field is valid
    this.units = this.units.toUpperCase()
@@ -56,8 +57,7 @@ CmdTemperature.prototype = {
          return;
       }
       this.waiting_response = true;
-      cmd = "/home/jgjc/.local/bin/remo device get --token lDPCKK_hYfaSK34Av0NGIFAjfW8Fb_fd23g29anwJ2g.F884BI3bKFfvmzm3XeE_WYZaEEK-8Ld2qQTXAfcrWK8 | jq '.[0].newest_events.te.val"
-      this.exec(cmd, function (error, stdout, stderr) {
+      this.exec(this.cmd, function (error, stdout, stderr) {
             // Error detection
             if (error) {
                   self.log("Failed to");
