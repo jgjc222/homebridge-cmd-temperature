@@ -70,8 +70,7 @@ self.fs.appendFile(self.path+self.name, stdout, function (err) {
                   resolve(stdout);
     }
             });
-            this.log("tail -n 20 "+self.path+self.name+" > "+self.path+self.name);
-            this.exec("tail -n 20 "+self.path+self.name+" > "+self.path+self.name);
+            this.exec("tail -n 20 '"+self.path+self.name+"' > '"+self.path+self.name+"'");
       });
       this.last_value.then((value) => {
          this.temperatureService
