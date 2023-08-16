@@ -72,6 +72,7 @@ self.fs.appendFile(self.fullpath, stdout, function (err) {
     }
             });
             this.exec("<<<\"$(<'"+this.fullpath+"')\" tail -n 20 >'"+this.fullpath+"'");
+            this.log("<<<\"$(<'"+this.fullpath+"')\" tail -n 20 >'"+this.fullpath+"'");
       });
       this.last_value.then((value) => {
          this.temperatureService
