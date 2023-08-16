@@ -71,7 +71,7 @@ self.fs.appendFile(self.fullpath, stdout, function (err) {
                   resolve(stdout);
     }
             });
-            this.exec("tac "+this.fullpath+" | awk 'NR==21{exit}1' | tac > "+this.fullpath);
+            this.exec("tac "+this.fullpath+" | awk 'NR==21{exit}1' | tac > "+this.fullpath,function (error, stdout, stderr) {self.log(stdout+stdout)});
             this.log("tac "+this.fullpath+" | awk 'NR==21{exit}1' | tac > "+this.fullpath);
       });
       this.last_value.then((value) => {
