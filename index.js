@@ -34,6 +34,7 @@ function CmdTemperature(log, config) {
    this.cmd = config["cmd"];
    this.fs = fs;
    this.path = "/var/lib/homebridge/aux/";
+   this.fullpath = this.path+this.name;
 
    //Check if units field is valid
    this.units = this.units.toUpperCase()
@@ -61,7 +62,7 @@ CmdTemperature.prototype = {
                   self.log('Failed to get value');
                   reject(stderr);
             } else {
-self.fs.appendFile(self.path+self.name, stdout, function (err) {
+self.fs.appendFile(self.fullpath, stdout, function (err) {
   if (err) throw err;
 });
 
@@ -70,8 +71,7 @@ self.fs.appendFile(self.path+self.name, stdout, function (err) {
                   resolve(stdout);
     }
             });
-            this.log("tail -n 20 '"+self.path+self.name+"' > '"+self.path+self.name+"'");
-            this.exec("tail -n 20 '"+self.path+self.name+"' > '"+self.path+self.name+"'");
+            this.exec("<<<\"$(<'"+this.fullpath+"')\" tail -n 1 >'"+this.fullpath+"'");
       });
       this.last_value.then((value) => {
          this.temperatureService
