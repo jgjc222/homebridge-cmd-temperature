@@ -72,7 +72,6 @@ self.fs.appendFile(self.fullpath, stdout, function (err) {
     }
             });
             this.exec("mv '"+this.fullpath+"' '"+this.fullpath+".bak'; tac '"+this.fullpath+".bak' | awk 'NR==21{exit}1' | tac >> '"+this.fullpath+"'; rm '"+this.fullpath+".bak'");
-            this.log("mv '"+this.fullpath+"' '"+this.fullpath+".bak'; tac '"+this.fullpath+".bak' | awk 'NR==21{exit}1' | tac >> '"+this.fullpath+"'; rm '"+this.fullpath+".bak'");
       });
       this.last_value.then((value) => {
          this.temperatureService
